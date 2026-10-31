@@ -2,53 +2,473 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Yifei's Playlist</title>
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      background: #f3eee8;
-      color: #352e38;
-      font-family: sans-serif;
-    }
-    main {
-      width: min(82%, 360px);
-      padding: 28px;
-      border-radius: 24px;
-      background: #fffaf5;
-      box-shadow: 0 12px 40px #00000012;
-    }
-    h1 { font-size: 27px; }
-    .sub { color: #897e88; font-size: 14px; }
-    .track {
-      margin-top: 24px;
-      padding: 16px;
-      background: #f3eee8;
-      border-radius: 16px;
-    }
-    audio { width: 100%; margin-top: 12px; }
-  </style>
-</head>
-<body>
-  <main>
-    <p class="sub">A LITTLE CORNER OF MUSIC</p>
-    <h1>Yifei's Playlist ♡</h1>
-    <p class="sub">Songs and memories, just for you.</p>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黎赫明</title>
 
-    <section class="track">
-      <strong>01 · Owen</strong>
-      <p class="sub">A personal recording</p>
-      <audio controls preload="none">
-        <source
-          src="https://raw.githubusercontent.com/Yifei0403/NFC-Music/main/owen.m4a"
-          type="audio/mp4">
-        Your browser does not support audio playback.
-      </audio>
-    </section>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500&display=swap');
+
+:root {
+  --ivory: #f5f0e6;
+  --paper: #fffcf5;
+  --gold: #a88b55;
+  --darkgold: #80683d;
+  --ink: #39352e;
+  --muted: #928775;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 50% 0%, #fffdf7 0%, transparent 65%),
+    var(--ivory);
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
+}
+
+.page {
+  width: min(100% - 32px, 680px);
+  margin: auto;
+  padding: 48px 0 55px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.crown {
+  color: var(--gold);
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 5px;
+  color: var(--darkgold);
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: clamp(35px, 8vw, 54px);
+  font-weight: 500;
+  margin: 12px 0 7px;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  font-family: 'Noto Serif SC', serif;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 3px;
+}
+
+.ornament {
+  color: var(--gold);
+  margin: 23px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.ornament::before,
+.ornament::after {
+  content: "";
+  width: 65px;
+  height: 1px;
+  background: #cbb98f;
+}
+
+.player-card {
+  background: var(--paper);
+  border: 1px solid #dfd1b5;
+  padding: 30px;
+  box-shadow: 0 12px 35px #76613b12;
+}
+
+.cover-frame {
+  padding: 8px;
+  border: 1px solid #d6c49f;
+  background: #fffdf8;
+  width: min(100%, 320px);
+  margin: 0 auto 25px;
+}
+
+.cover {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle, #f4e9d2, #d7c29b);
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.cover::before {
+  content: "✧";
+  font-size: 90px;
+  color: #9e804b;
+  opacity: .75;
+}
+
+.cover.has-image::before { content: none; }
+
+.cover-label {
+  position: absolute;
+  bottom: 18px;
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: #79633d;
+}
+
+.now-playing {
+  text-align: center;
+  margin: 10px 0 25px;
+}
+
+.now-playing h2 {
+  font-size: 30px;
+  font-weight: 500;
+  margin: 0 0 5px;
+}
+
+.now-playing p {
+  margin: 0;
+  font-family: 'Noto Serif SC', serif;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.progress-area { margin: 20px 0; }
+
+.progress {
+  width: 100%;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+.times {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  margin: 20px 0 30px;
+}
+
+.controls button {
+  border: 0;
+  background: none;
+  color: var(--darkgold);
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.controls .play {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: white;
+  font-size: 23px;
+  box-shadow: 0 4px 12px #a88b5535;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--darkgold);
+  font-size: 12px;
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+}
+
+.section-title::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: #e2d6bf;
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 10px;
+  border-bottom: 1px solid #eee7d9;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.track:hover, .track.active {
+  background: #f4eee2;
+}
+
+.track-number {
+  color: var(--gold);
+  font-size: 16px;
+  width: 25px;
+  text-align: center;
+}
+
+.track-cover {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border: 1px solid #d8c8a9;
+  background: linear-gradient(135deg, #e8dcc3, #bfa77d);
+  background-size: cover;
+  background-position: center;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-size: 16px;
+}
+
+.track-info { flex: 1; min-width: 0; }
+
+.track-info strong {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.track-info small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+.track-status {
+  color: var(--gold);
+  font-size: 17px;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 28px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+audio { display: none; }
+
+@media (max-width: 480px) {
+  .page { padding-top: 32px; }
+  .player-card { padding: 20px 16px; }
+  .controls { gap: 27px; }
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <header class="header">
+    <div class="crown">♔</div>
+    <div class="eyebrow">A Private Music Collection</div>
+    <h1>Yifei's Music Salon</h1>
+    <div class="subtitle">一间属于音乐的私人沙龙</div>
+    <div class="ornament">✧</div>
+  </header>
+
+  <main class="player-card">
+
+    <div class="cover-frame">
+      <div class="cover" id="mainCover">
+        <div class="cover-label">MUSICA · MEMORIA</div>
+      </div>
+    </div>
+
+    <div class="now-playing">
+      <h2 id="songTitle">Owen</h2>
+      <p id="songSubtitle">NOW PLAYING</p>
+    </div>
+
+    <audio id="audio" preload="metadata"></audio>
+
+    <div class="progress-area">
+      <input class="progress" id="progress"
+             type="range" min="0" max="100" value="0">
+      <div class="times">
+        <span id="currentTime">0:00</span>
+        <span id="duration">0:00</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="prev" aria-label="Previous">Ⅱ◀</button>
+      <button class="play" id="play" aria-label="Play">▶</button>
+      <button id="next" aria-label="Next">▶Ⅱ</button>
+    </div>
+
+    <div class="section-title">THE COLLECTION</div>
+    <div id="playlist"></div>
+
   </main>
+
+  <footer class="footer">
+    ✧ &nbsp; CURATED WITH LOVE &nbsp; ✧
+  </footer>
+
+</div>
+
+<script>
+/*
+  添加歌曲时，在下面的数组里增加一项。
+  src：GitHub Raw 音频链接
+  cover：封面图片链接（可以暂时留空）
+*/
+
+const songs = [
+  {
+    title: "Owen Liu的人生航向",
+    src: "https://raw.githubusercontent.com/Yifei0403/NFC-Music/main/owen.m4a",
+    cover: ""
+  }
+];
+
+const audio = document.getElementById("audio");
+const playButton = document.getElementById("play");
+const progress = document.getElementById("progress");
+const playlist = document.getElementById("playlist");
+const mainCover = document.getElementById("mainCover");
+
+let currentIndex = 0;
+
+function formatTime(seconds) {
+  if (!Number.isFinite(seconds)) return "0:00";
+  const min = Math.floor(seconds / 60);
+  const sec = Math.floor(seconds % 60);
+  return min + ":" + String(sec).padStart(2, "0");
+}
+
+function renderPlaylist() {
+  playlist.innerHTML = "";
+
+  songs.forEach((song, index) => {
+    const item = document.createElement("div");
+    item.className = "track" +
+      (index === currentIndex ? " active" : "");
+
+    const coverStyle = song.cover
+      ? `style="background-image:url('${song.cover}')"`
+      : "";
+
+    item.innerHTML = `
+      <div class="track-number">${String(index + 1).padStart(2, "0")}</div>
+      <div class="track-cover" ${coverStyle}>${song.cover ? "" : "♬"}</div>
+      <div class="track-info">
+        <strong></strong>
+        <small>TRACK ${String(index + 1).padStart(2, "0")}</small>
+      </div>
+      <div class="track-status">${index === currentIndex && !audio.paused ? "♫" : "›"}</div>
+    `;
+
+    item.querySelector("strong").textContent = song.title;
+    item.addEventListener("click", () => loadSong(index, true));
+    playlist.appendChild(item);
+  });
+}
+
+function loadSong(index, autoplay = false) {
+  currentIndex = (index + songs.length) % songs.length;
+  const song = songs[currentIndex];
+
+  audio.src = song.src;
+  document.getElementById("songTitle").textContent = song.title;
+  document.getElementById("songSubtitle").textContent =
+    "NOW PLAYING · " + String(currentIndex + 1).padStart(2, "0");
+
+  mainCover.style.backgroundImage = song.cover
+    ? `url("${song.cover}")`
+    : "";
+
+  mainCover.classList.toggle("has-image", !!song.cover);
+  progress.value = 0;
+  playButton.textContent = "▶";
+  renderPlaylist();
+
+  if (autoplay) {
+    audio.play().then(() => {
+      playButton.textContent = "Ⅱ";
+      renderPlaylist();
+    }).catch(() => {
+      playButton.textContent = "▶";
+    });
+  }
+}
+
+playButton.addEventListener("click", () => {
+  if (audio.paused) {
+    audio.play().then(() => {
+      playButton.textContent = "Ⅱ";
+      renderPlaylist();
+    }).catch(() => {});
+  } else {
+    audio.pause();
+    playButton.textContent = "▶";
+    renderPlaylist();
+  }
+});
+
+document.getElementById("prev").addEventListener("click", () => {
+  loadSong(currentIndex - 1, true);
+});
+
+document.getElementById("next").addEventListener("click", () => {
+  loadSong(currentIndex + 1, true);
+});
+
+audio.addEventListener("timeupdate", () => {
+  if (audio.duration) {
+    progress.value = audio.currentTime / audio.duration * 100;
+  }
+  document.getElementById("currentTime").textContent =
+    formatTime(audio.currentTime);
+  document.getElementById("duration").textContent =
+    formatTime(audio.duration);
+});
+
+progress.addEventListener("input", () => {
+  if (audio.duration) {
+    audio.currentTime = progress.value / 100 * audio.duration;
+  }
+});
+
+audio.addEventListener("ended", () => {
+  loadSong(currentIndex + 1, true);
+});
+
+audio.addEventListener("play", () => {
+  playButton.textContent = "Ⅱ";
+  renderPlaylist();
+});
+
+audio.addEventListener("pause", () => {
+  playButton.textContent = "▶";
+  renderPlaylist();
+});
+
+loadSong(0);
+</script>
 </body>
 </html>
